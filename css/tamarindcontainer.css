@@ -1,0 +1,527 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+/* Body and Game Container */
+body {
+   font-family: 'Patrick Hand', cursive;
+   background-image: url(/assets/bg.png);
+   background-size: cover;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 100%;
+   width: 100%;
+}
+
+audio {
+    display: none;
+}
+
+.game-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+}
+
+/* Left Sidebar (Barks) */
+.sidebar {
+    width: 200px;
+    padding: 10px;
+    background-color: #45cf4a;
+    border-radius: 8px;
+    margin: 10px;
+    height: auto;   
+    overflow-y: auto;
+    position: relative; 
+    z-index: 1000;
+}
+
+.bark-title {
+    position: absolute;
+    top: 80px;
+    left: 140px;
+    color: rgb(5, 129, 5);
+    font-size: 2rem;
+    text-align: left;
+}
+
+.leave-title {
+    position: absolute;
+    top: 80px;
+    right: 140px;
+    color: rgb(5, 129, 5);
+    font-size: 2rem;
+    text-align: right;
+}
+
+.fruit-title {
+    position: absolute;
+    bottom: 150px;
+    left: 450px;
+    color: rgb(5, 129, 5);
+    font-size: 2rem;
+    text-align: left;
+}
+
+.flower-title {
+    position: absolute;
+    bottom: 150px;
+    right: 450px;
+    color: rgb(5, 129, 5);
+    font-size: 2rem;
+    text-align: right;
+}
+
+/* Center Section (Tree Silhouette) */
+.center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 50px;
+    position: relative;
+}
+
+.tree-heading {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.cardTreeContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35%;
+    height: 65%;
+    border-radius: 1rem;
+    background-color: #f5f6f9;
+    background-image: linear-gradient(
+      43deg,
+      #4158d0 0%,
+      #2a9bc8 46%,
+      #ebecf1 100%
+    );
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+      rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
+      rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+      rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
+      rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+
+.tree-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+
+#tamarind-tree-mainimg {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: auto;
+    touch-action: none;
+}
+
+#tamarind-tree-mainimg img {
+    width: 100%;
+    height: auto;
+}
+
+.silhouette {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/tamarind/tamarind-silhoutte.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 1;
+    pointer-events: none;
+}
+
+.message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    z-index: 9999;
+}
+
+.footer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    gap: 10px;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+}
+
+.part {
+    margin: 0 2px;
+    text-align: center;
+    position: relative;
+    z-index: 1000;
+    cursor: grab;
+}
+
+.part:active {
+    cursor: grabbing;
+}
+
+.ui-draggable-dragging {
+    z-index: 10000 !important;
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+.droppable-hover {
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
+}
+
+.part img {
+    pointer-events: none;
+    width: 130%;
+    height: 130px;
+    object-fit: contain;
+    cursor: pointer;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 8px;
+}
+
+.part img:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .game-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sidebar {
+        width: auto;
+        margin: 10px 0;
+    }
+
+    .center {
+        margin: 10px 0;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.main-image {
+    display: none;
+}
+
+#tamarindmain-barkimg,
+#tamarindmain-leaveimg,
+#tamarindmain-fruitimg,
+#tamarindmain-flowerimg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    display: none;
+    pointer-events: none;
+}
+
+.modal-info {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 120%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #b4ddf2;
+    margin: 10% auto;
+    padding: 30px;
+    height: 60%;
+    width: 70%;
+    border: 10px solid rgb(5, 129, 5);
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.tree-heading1 {
+    position: absolute;
+    left: 40%;
+    top: 20px;
+    transform: translate(-50%, 0);
+    z-index: 10;
+}
+
+.tree-heading1 h1 {
+    font-size: 3rem;
+    color: #2c3e50;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 0;
+}
+
+.restartBtn, .quitBtn {
+    position: fixed;
+    top: 20px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    z-index: 1000;
+}
+
+.restartBtn {
+    top:0px;
+    left: -100px;
+    background: none;
+}
+
+.restartBtn img {
+    width: 50%;
+    height: 50%;
+    padding: 10px 20px;
+}
+
+.quitBtn {
+    top:0px;
+    right: -100px;
+    background: none;
+}
+
+.quitBtn img {
+    width: 50%;
+    height: 50%;
+    padding: 10px 20px;
+}
+
+.score {
+    position: fixed;
+    top: 10px;
+    left: 60%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    z-index: 1000;
+    margin-top: 15px;
+    background-image: url('/assets/utilities/buttonBgimg.png');
+    background-size: cover;
+}
+
+.restartBtn:hover, .quitBtn:hover {
+    transform: translateY(-2px);
+}
+
+.modal-body {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.cloud-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 65px;
+    top: 60px;
+}
+
+.modal-image {
+    width: 35%;
+    height: 50%;
+    margin-right: 20px;
+}
+
+.modal-text {
+    flex: 1;
+}
+
+.modal-over {
+    color: red;
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content-game-over {
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 5px solid rgb(5, 129, 5);
+    height: 50%;
+    width: 50%;
+}
+
+#closeGameOverModal {
+    position: fixed;
+    right: 28%;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+#playAgainBtn img,
+#mainMenuBtn img {
+    width: 50%;
+    height: 150%;
+}
+
+.modal-button {
+    width: 150px;
+    height: 50px;
+    margin: 0 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.modal-button:hover {
+    transform: scale(1.05);
+}
+
+#gameOverimg {
+    width: 100%;
+    height: auto;
+    border: none;
+    background: none;
+    cursor: default;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#gameOverimg img {
+    width: 50%;
+    height: 50%;
+}
+
+#identify-next-tree {
+    position: relative;
+    top: 20rem;
+    right: 36rem;
+    padding: 10px 20px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    z-index: 1000;
+    background-image: url('/assets/utilities/buttonBgimg.png');
+    background-size: cover;
+    cursor: pointer;
+}
+
+.circle {
+    position: absolute;
+    background-color: rgba(75, 240, 57, 0.8);
+    border-radius: 70%;
+    padding: 15px;
+    text-align: center;
+    width: 140px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+    box-shadow: 0 7px 15px rgba(2, 4, 0, 0.2);
+}
+
+.leave-circle {
+    left: -60px;
+    bottom: 0px;
+}
+
+.bark-circle {
+    left: -30px;
+    top: 60px;
+}
+
+.lifespan-circle, .variety-circle {
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.lifespan-circle {
+    left: calc(25% - 60px);
+}
+
+.variety-circle {
+    left: calc(75% + 60px);
+}
+
+.right-fruit-circle {
+    right: -30px;
+    top: 60px
+}
+
+.right-flower-circle {
+    right: -30px;
+    bottom: 0px;
+}

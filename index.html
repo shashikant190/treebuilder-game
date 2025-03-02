@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tree Builder Game</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="icon" href="/assets/game2-favicon.png" type="image/x-icon">
+    <style>
+        /* Prevent all text selection and tap highlights */
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            overflow: hidden;
+            touch-action: none; /* Disable browser touch gestures */
+        }
+
+        .no-scroll { overflow: hidden; }
+
+        .game-iframe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 10000;
+            display: none;
+        }
+
+        /* Blocking overlay for non-interactive areas */
+        .touch-blocker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9998;
+            pointer-events: auto; 
+        }
+        #backgroundMusic {
+            display: none; /* Hide the audio element */
+        }
+        /* Add full-screen styles */
+        /* :-webkit-full-screen { width: 100% !important; height: 100% !important }
+        :-moz-full-screen { width: 100% !important; height: 100% !important }
+        :fullscreen { width: 100% !important; height: 100% !important }  */
+    </style>
+</head>
+<body>
+     <!-- Add a hidden full-screen trigger button -->
+     <button id="fullscreenTrigger" style="display: none;"></button>
+    <!-- Blocking overlay (will be controlled by JavaScript) -->
+    <div class="touch-blocker" id="touchBlocker"></div>
+    
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-container">
+            <div class="loading-bar">
+                <div id="progressBar" class="progress"></div>
+            </div>
+            <div id="progressText" class="percentage">0%</div>
+        </div>
+    </div>
+
+    <!-- Game iframe container -->
+    <iframe id="gameFrame" class="game-iframe"></iframe>
+
+    <video autoplay muted loop id="backgroundVideo">
+        <source src="./assets/utilities/bgPageGame2.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Add audio element for background music -->
+    <audio id="backgroundMusic" autoplay loop>
+        <source src="/assets/audio/game-music.mp3" type="audio/mpeg">
+        <!-- <source src="/assets/audio/game-music.ogg" type="audio/ogg"> -->
+        Your browser does not support the audio element.
+    </audio>
+    <!-- Add this audio element below background music -->
+<audio id="buttonTapSound" style="display: none;">
+    <source src="/assets/audio/buttonTap.mp3" type="audio/mpeg">
+</audio>
+    
+    <div class="buttons-container">
+        <button id="playBtn" class="game-button">
+            <img src="/assets/utilities/play.png" alt="Play">
+            <span>Play</span>
+        </button>
+        <button id="instructionsBtn" class="game-button">
+            <img src="/assets/utilities/about.png" alt="Rules">
+            <span>Rules</span>
+        </button>
+        <button id="quitBtn" class="game-button">
+            <img src="/assets/utilities/close.png" alt="Quit">
+            <span>Quit</span>
+        </button>
+    </div>
+
+    <!-- Rules Modal -->
+    <div id="rulesModal" class="modal">
+        <div class="modal-content">
+            <button id="closeModal" class="close-button">
+                <img src="/assets/utilities/close.png" alt="Close">
+            </button>
+        </div>
+    </div>
+
+    <!-- Quit Confirmation Modal -->
+    <div id="quitConfirmationModal" class="modal">
+        <div class="quit-modal-content">
+            <h2>Are you sure you want to quit?</h2>
+            <div class="quit-buttons">
+                <button id="yesQuitBtn">Yes</button>
+                <button id="noQuitBtn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+          // Fullscreen Management
+        //   function enterFullscreen() {
+        //     const element = document.documentElement;
+        //     if (element.requestFullscreen) {
+        //         element.requestFullscreen().catch(err => {
+        //             console.error('Error attempting to enable fullscreen:', err);
+        //         });
+        //     } else if (element.mozRequestFullScreen) { /* Firefox */
+        //         element.mozRequestFullScreen();
+        //     } else if (element.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        //         element.webkitRequestFullscreen();
+        //     } else if (element.msRequestFullscreen) { /* IE/Edge */
+        //         element.msRequestFullscreen();
+        //     }
+        // }
+
+        // // Attempt fullscreen on load (will work if allowed by browser config)
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     // First try to trigger through a simulated user gesture
+        //     const fsButton = document.getElementById('fullscreenTrigger');
+        //     fsButton.addEventListener('click', enterFullscreen);
+        //     fsButton.click();
+            
+        //     // Fallback: Direct request (will usually require user gesture)
+        //     setTimeout(enterFullscreen, 1000);
+        // });
+
+        // // Handle fullscreen change events
+        // document.addEventListener('fullscreenchange', handleFullscreenChange);
+        // document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        // document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        // document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+        // function handleFullscreenChange() {
+        //     if (!document.fullscreenElement) {
+        //         // Automatically re-enter fullscreen if user exits
+        //         enterFullscreen();
+        //     }
+        // }
+//......................................................
+        // Kiosk Mode Initialization
+        (function initKioskMode() {
+            // Disable context menu
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            
+            // Prevent zoom gestures
+            document.addEventListener('gesturestart', e => e.preventDefault());
+            document.addEventListener('touchmove', e => {
+                if (e.scale !== 1) e.preventDefault();
+            }, { passive: false });
+
+            // Manage touch blocker
+            const touchBlocker = document.getElementById('touchBlocker');
+            function updateTouchBlocker() {
+                // Enable touch only on interactive elements
+                const interactiveElements = [
+                    ...document.querySelectorAll('button, .modal, .game-iframe'),
+                    document.getElementById('loadingScreen')
+                ];
+                
+                interactiveElements.forEach(el => {
+                    el.style.pointerEvents = 'auto';
+                });
+                
+                touchBlocker.style.pointerEvents = 'none';
+            }
+            updateTouchBlocker();
+        })();
+//................................................................  
+        // Loading Screen Functionality
+        const loadingScreen = document.getElementById('loadingScreen');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        let progress = 0;
+        let simulatedProgress = 0;
+
+        // Simulated loading progress
+        const simulateProgress = setInterval(() => {
+            simulatedProgress += 1;
+            if (simulatedProgress <= 100) {
+                progress = Math.min(progress + 1, simulatedProgress);
+                updateProgress(progress);
+            }
+        }, 30);
+
+        // Real loading progress
+        window.addEventListener('load', () => {
+            clearInterval(simulateProgress);
+            const finishProgress = setInterval(() => {
+                progress = Math.min(progress + 1, 100);
+                updateProgress(progress);
+                if (progress === 100) {
+                    clearInterval(finishProgress);
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }
+            }, 10);
+        });
+
+        function updateProgress(value) {
+            progressBar.style.width = value + '%';
+            progressText.textContent = value + '%';
+        }
+
+        // Modified Game Navigation
+        const gameFrame = document.getElementById('gameFrame');
+        
+        // New function to load game content
+        function loadGameScreen(url) {
+            document.body.classList.add('no-scroll');
+            gameFrame.style.display = 'block';
+            gameFrame.src = url;
+            
+            // Hide main content
+            document.querySelector('.buttons-container').style.display = 'none';
+            document.getElementById('backgroundVideo').style.display = 'none';
+        }
+
+        // Close game screen function
+        function closeGameScreen() {
+            document.body.classList.remove('no-scroll');
+            gameFrame.style.display = 'none';
+            gameFrame.src = '';
+            
+            // Show main content
+            document.querySelector('.buttons-container').style.display = 'flex';
+            document.getElementById('backgroundVideo').style.display = 'block';
+        }
+
+        // Event listener for messages from iframe
+        window.addEventListener('message', function(e) {
+            if (e.data === 'close-game') {
+                closeGameScreen();
+            }
+        });
+
+        // Modified Play Button Click
+        document.getElementById('playBtn').addEventListener('click', () => {
+            loadGameScreen('/html/mangocontainer.html');
+        });
+
+        // Rest of your original event listeners
+        document.getElementById('instructionsBtn').addEventListener('click', () => {
+            document.getElementById('rulesModal').style.display = 'block';
+            document.body.classList.add('no-scroll');
+        });
+
+        document.getElementById('quitBtn').addEventListener('click', () => {
+            document.getElementById('quitConfirmationModal').style.display = 'block';
+        });
+
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('rulesModal').style.display = 'none';
+            document.body.classList.remove('no-scroll');
+        });
+    
+        const yesQuitBtn = document.getElementById('yesQuitBtn');
+        const noQuitBtn = document.getElementById('noQuitBtn');
+
+        yesQuitBtn.addEventListener('click', () => {
+    window.location.href = 'http://games.rrbcea.org/'; 
+});
+
+noQuitBtn.addEventListener('click', () => {
+    // Close the modal or perform any other action
+    const modal = document.getElementById('quitConfirmationModal');
+    modal.style.display = 'none'; // Hide the modal
+});
+
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+                document.body.classList.remove('no-scroll');
+            }
+        }
+
+        // Audio Handling
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    
+    // Function to handle audio play
+    function playBackgroundMusic() {
+        backgroundMusic.play().catch(error => {
+            // If autoplay fails, enable music playback on first user interaction
+            document.body.addEventListener('click', () => {
+                backgroundMusic.play();
+            }, { once: true });
+        });
+    }
+
+    // Try to play music when loading is complete
+    loadingScreen.addEventListener('transitionend', () => {
+        if (loadingScreen.style.display === 'none') {
+            playBackgroundMusic();
+        }
+    });
+
+    // Optional: Pause music when entering game
+    document.getElementById('playBtn').addEventListener('click', () => {
+        backgroundMusic.pause();
+    // Send increment request to Tree Builder server
+    fetch('https://usertree.vercel.app/api/increment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Tree Builder play count:', data.count);
+        loadGameScreen('/html/mangocontainer.html');
+    })
+    .catch(error => {
+        console.error('Error logging play:', error);
+        // Load game even if logging fails
+        loadGameScreen('/html/mangocontainer.html');
+    });
+});
+
+    // Optional: Resume music when returning from game
+    function closeGameScreen() {
+        // ... existing code ...
+        backgroundMusic.play();
+    }
+
+    // Add this code right after selecting the backgroundMusic element
+    const buttonTapAudio = document.getElementById('buttonTapSound');
+    const allButtons = document.querySelectorAll('button');
+
+   // Universal tap sound handler (revised)
+function playButtonSound() {
+    try {
+        // Create new audio instance instead of cloning
+        const audio = new Audio(buttonTapAudio.firstElementChild.src);
+        audio.play().catch(error => console.error('Button sound error:', error));
+    } catch (error) {
+        console.error('Audio creation failed:', error);
+    }
+}
+
+// Improved event listeners for buttons
+allButtons.forEach(button => {
+    // Touch devices
+    button.addEventListener('touchstart', function(e) {
+        playButtonSound();
+        // Store touch start time
+        this.touchStart = e.timeStamp;
+    });
+
+    // Mouse clicks
+    button.addEventListener('mousedown', playButtonSound);
+
+    // Prevent sound on long presses
+    button.addEventListener('touchend', function(e) {
+        if (e.timeStamp - this.touchStart > 300) {
+            e.stopImmediatePropagation();
+        }
+    });
+});
+function playButtonSound() {
+    setTimeout(() => {
+        try {
+            const audio = new Audio(buttonTapAudio.firstElementChild.src);
+            audio.play().catch(console.error);
+        } catch (error) {
+            console.error('Audio error:', error);
+        }
+    }, 50);
+}
+// Preload audio properly
+document.addEventListener('DOMContentLoaded', () => {
+    // Create dummy audio to force preload
+    const preloadAudio = new Audio(buttonTapAudio.firstElementChild.src);
+    preloadAudio.preload = 'auto';
+});
+    </script>
+</body>
+</html>

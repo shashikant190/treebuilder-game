@@ -1,0 +1,648 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+/* Body and Game Container */
+body {
+   font-family: 'Patrick Hand', cursive;
+   /* font-family: Arial, sans-serif; */
+    /* background-color: #82b0e6; */
+    background-image: url(/assets/bg.png);
+    /* Background size cover is going to cover only screen size */
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: auto;
+    margin: 0; */
+   
+    height: 100%;
+    width: 100%;
+    
+}
+
+audio {
+    display: none;
+  }
+
+.game-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: center;
+    
+    /* justify-content: space space-between; */
+    
+    /* max-width: 1200px; */
+    align-items: center;
+    /* pointer-events: none;  */
+    
+   
+}
+
+
+/* Left Sidebar (Barks) */
+.sidebar {
+    width: 200px;
+    padding: 10px;
+    background-color: #45cf4a;
+    border-radius: 8px;
+    margin: 10px;
+    height: auto;   
+    overflow-y: auto;
+    position: relative; 
+    z-index: 1000;
+}
+ /*
+*.sidebar img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    object-fit: cover;
+    object-position: center;
+} 
+*/
+/* .sidebar-right h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    
+} */
+
+
+
+.bark-title {
+    position: absolute; /* Position the heading absolutely */
+    top: 80px; /* Distance from the top */
+    left: 140px; /* Distance from the left */
+    color: rgb(5, 129, 5); /* Text color */
+    font-size: 2rem; /* Font size */
+    text-align: left; /* Align text to the left */
+}
+
+.leave-title {
+    position: absolute; /* Position the heading absolutely */
+    top: 80px; /* Distance from the top */
+    right: 140px; /* Distance from the left */
+    color: rgb(5, 129, 5); /* Text color */
+    font-size: 2rem; /* Font size */
+    text-align: right; /* Align text to the left */
+}
+
+.fruit-title {
+    position: absolute; /* Position the heading absolutely */
+    bottom: 150px; /* Distance from the top */
+    left: 450px; /* Distance from the left */
+    color: rgb(5, 129, 5); /* Text color */
+    font-size: 2rem; /* Font size */
+    text-align: left; /* Align text to the left */
+}
+
+.flower-title {
+    position: absolute; /* Position the heading absolutely */
+    bottom: 150px; /* Distance from the top */
+    right: 450px; /* Distance from the left */
+    color: rgb(5, 129, 5); /* Text color */
+    font-size: 2rem; /* Font size */
+    text-align: right; /* Align text to the left */
+}
+
+/* Center Section (Tree Silhouette) */
+.center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 50px;
+    position: relative; /* Enable absolute positioning of children */
+}
+
+
+.tree-heading {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Independent Positioning for Tree Elements */
+.cardTreeContainer {
+    position: fixed; /* Changed from relative to fixed for viewport centering */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Perfect centering adjustment */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35%;
+    height: 65%;
+    border-radius: 1rem;
+    background-color: #f5f6f9;
+    background-image: linear-gradient(
+      43deg,
+      #4158d0 0%,
+      #2a9bc8 46%,
+      #ebecf1 100%
+    );
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+      rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
+      rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+      rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
+      rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+}
+
+.tree-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+/* Mango Main Image */
+#mango-tree-mainimg {
+    position: absolute; /* Absolute positioning within the parent container */
+    top: 10%; /* Example of positioning from the top */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Ensure it is truly centered */
+    width: 80%; /* Ensure it's smaller than the card container */
+    height: auto;
+    touch-action: none;
+}
+
+#mango-tree-mainimg img {
+    width: 100%;
+    height: auto;
+}
+
+/* Silhouette */
+.silhouette {
+    position: absolute; /* Absolute positioning within the main image */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/mango/mango-silhouette.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 1;
+    pointer-events: none;
+}
+
+
+/* Message box */
+.message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    z-index: 9999;
+}
+
+/* Footer (Fruits & Flowers) */
+.footer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    gap: 10px;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+   
+   
+}
+
+/* Fruits and Flowers Bars */
+/* .fruits-bar, .flowers-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color:transparent;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.fruits-bar h3, .flowers-bar h3 {
+    margin-bottom: 20px;
+    margin-right: 10px; 
+    color: rgb(2, 60, 2);
+} */
+
+.part {
+   
+    margin: 0 2px;
+    text-align: center;
+    position: relative; /* Add this */
+    z-index: 1000;
+    /* touch-action: manipulation;  */
+    cursor: grab; /* Show grab cursor for better UX */
+    /* user-select: none; */
+    filter: none;
+
+}
+
+.part:active {
+    cursor: grabbing; /* Show grabbing cursor during drag */
+  }
+
+  .ui-draggable-dragging {
+    z-index: 10000 !important;
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+  }
+  
+  .droppable-hover {
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
+  }
+
+  
+.part img {
+    pointer-events: none; /* Prevent image from blocking touch events */
+    width: 130%;
+    height: 130px; /* Fixed height for consistency */
+    /* max-width: 120px; */
+    object-fit: contain;
+    cursor: pointer;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.1); /* Slight white background */
+    border-radius: 12px; /* Rounded corners */
+    padding: 8px;
+    /* box-shadow: 
+        rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+        rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
+        rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset,
+        rgba(0, 0, 0, 0.06) 0px 2px 1px,
+        rgba(0, 0, 0, 0.09) 0px 4px 2px,
+        rgba(0, 0, 0, 0.09) 0px 8px 4px;
+    transition: transform 0.2s ease-in-out; */
+}
+
+.part img:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .game-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sidebar {
+        width: auto;
+        margin: 10px 0;
+    }
+
+    .center {
+        margin: 10px 0;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.main-image {
+    display: none;
+}
+/**
+/* Add styles for the new images to match the main mango image and silhouettes */
+#mangomain-barkimg,
+#mangomain-leaveimg,
+#mangomain-fruitimg,
+#mangomain-flowerimg {
+    position: absolute; /* Absolute positioning within the main image container */
+    top: 0; /* Align with the top of the main image */
+    left: 0; /* Align with the left of the main image */
+    width: 100%; /* Ensure they take the full width of the container */
+    height: auto; /* Maintain aspect ratio */
+    display: none; /* Initially hidden */
+    pointer-events: none; /* Prevent interaction */
+}
+
+/* Modal styles */
+.modal-info {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 120%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #b4ddf2;
+    margin: 10% auto; /* Adjusted margin for better centering */
+    padding: 30px; /* Increased padding for better spacing */
+    height: 60%; /* Increased height for larger modal */
+    width: 70%; /* Increased width for larger modal */
+    border: 10px solid rgb(5, 129, 5);
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Game Controls and Header */
+.tree-heading1 {
+    position: absolute;
+    left: 40%;
+    top: 20px;
+    transform: translate(-50%, 0);
+    z-index: 10;
+}
+
+.tree-heading1 h1 {
+    font-size: 3rem;
+    color: #2c3e50; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 0;
+}
+
+/* Button Controls */
+.restartBtn, .quitBtn {
+    position: fixed;
+    top: 20px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); */
+    border: none;
+    z-index: 1000;
+}
+
+.restartBtn {
+    top:0px;
+    left: -100px;
+    background: none;
+    /* background-color: #3498db; */
+    /* color: white; */
+}
+
+.restartBtn img {
+    width: 50%;
+    height: 50%;
+    padding: 10px 20px;
+}
+
+.quitBtn {
+    top:0px;
+    right: -100px;
+    background: none;
+}
+
+.quitBtn img {
+    width: 50%;
+    height: 50%;
+    padding: 10px 20px;
+}
+
+/* Score Container Styles */
+.score {
+    position: fixed;
+    top: 10px;
+    left: 60%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    z-index: 1000;
+    margin-top: 15px; /* Add space below the heading */
+    background-image: url('/assets/utilities/buttonBgimg.png'); /* Add your background image here */
+    background-size: cover; 
+}
+
+/* Hover effects */
+.restartBtn:hover, .quitBtn:hover {
+    /* background-color: #2980b9; */
+    transform: translateY(-2px);
+}
+
+/*  */
+  
+.modal-body {
+    display: flex; /* Use flexbox to align items side by side */
+    align-items: center; /* Center items vertically */
+    position: relative; /* Enable positioning for clouds */
+}
+
+.cloud-container {
+    position: relative; /* Position relative for absolute children */
+    display: flex;
+    justify-content: center; /* Center the mango tree image */
+    align-items: center; /* Center vertically */
+    left: 65px;
+    top: 60px;
+}
+
+
+
+.modal-image {
+    width: 35%; /* Set a width for the image */
+    height: 50%; /* Maintain aspect ratio */
+    margin-right: 20px; /* Space between image and text */
+}
+
+.modal-text {
+    flex: 1; /* Allow text to take the remaining space */
+}
+
+
+/* Modal styles */
+.modal-over {
+    color: red;
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+}
+
+.modal-content-game-over {
+    /* background-color: #fefefe; */
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    /* border: 5px solid #04a711; */
+    border-radius: 5px solid rgb(5, 129, 5);
+    height: 50%;
+    width: 50%; /* Could be more or less, depending on screen size */
+}
+
+#closeGameOverModal {
+    position: fixed;
+    right: 28%;
+}
+
+/* Button Container for Game Over */
+.button-container {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center the buttons */
+    margin-top: 30px; /* Space above the buttons */
+    /* flex-direction: row; */
+}
+
+/* Specific styles for Play Again and Main Menu buttons */
+#playAgainBtn img,
+#mainMenuBtn img {
+    width: 50%; /* Make the image fill the button */
+    height: 150%; /* Maintain aspect ratio */
+    /* flex-direction: row; */
+}
+/* Button Styles */
+.modal-button {
+    width: 150px; /* Set a fixed width for both buttons */
+    height: 50px; /* Set a fixed height for both buttons */
+    margin: 0 10px; /* Space between buttons */
+    border: none; /* Remove border */
+    background: none; /* Remove background */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: transform 0.3s ease; /* Smooth transform transition */
+}
+
+
+
+/* Hover effects for buttons */
+.modal-button:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+/* Game Over Image Button Styles */
+#gameOverimg {
+    width: 100%; /* Make the button fill the width of the modal */
+    height: auto; /* Maintain aspect ratio */
+    border: none; /* Remove border */
+    background: none; /* Remove background */
+    cursor: default; /* Default cursor since it's an image */
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center the image */
+    margin-bottom: 20px; /* Space below the image */
+}
+
+#gameOverimg img {
+    width: 50%; /* Make the image fill the button */
+    height: 50%; /* Maintain aspect ratio */
+    
+}
+
+#identify-next-tree {
+    position: relative;
+    /* top: 10px; */
+    /* right: 10%; */
+    /* align-items: center; */
+    /* align-content: center; */
+
+    /* left: 50px;
+    bottom: -250px; */
+    /* transform: translateX(%); */
+    top: 20rem;
+    right: 36rem;
+    padding: 10px 20px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    z-index: 1000;
+    /* margin-top: 15px;  */
+    background-image: url('/assets/utilities/buttonBgimg.png'); /* Add your background image here */
+    background-size: cover;
+    cursor: pointer;
+}
+
+.circle {
+    position: absolute; /* Position circles absolutely */
+    background-color: rgba(75, 240, 57, 0.8); /* White background with some transparency */
+    border-radius: 70%; /* Make it a circle */
+    padding: 15px; /* Add some padding */
+    text-align: center; /* Center the text */
+    width: 140px; /* Set a fixed width */
+    height: 120px; /* Set a fixed height */
+    display: flex; /* Use flexbox for centering text */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    font-size: 17px; /* Font size for the text */
+    box-shadow: 0 7px 15px rgba(2, 4, 0, 0.2); /* Add a shadow for depth */
+}
+
+.leave-circle {
+    left: -60px; /* Position circles to the left */
+    bottom: 0px;
+}
+
+.bark-circle {
+    left: -30px; /* Position circles to the left */
+    top: 60px;
+}
+
+.lifespan-circle, .variety-circle {
+    top: -60px; /* Position circles above the mango tree */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust for centering */
+}
+
+.lifespan-circle {
+    left: calc(25% - 60px); /* Position the first top circle to the left */
+}
+
+.variety-circle {
+    left: calc(75% + 60px); /* Position the second top circle to the right */
+}
+
+.right-fruit-circle {
+    right: -30px; /* Position circles to the left */
+    top: 60px
+    
+}
+
+.right-flower-circle {
+    right: -30px;
+    /* top: 190px; */
+    bottom: 0px;
+}
+
+/* .small-info {
+    color: red;
+    font-size: 12px;
+    font-weight: bold;
+
+} */
+
+

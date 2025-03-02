@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gulmohar</title>
+    <link rel="stylesheet" href="/css/gulmoharcontainer.css" />
+    <link rel="icon" href="/assets/game2-favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <style>
+      * {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+          overflow: hidden;
+          touch-action: none;
+      }
+
+      .no-scroll { overflow: hidden; }
+
+      .game-iframe {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border: none;
+          z-index: 10000;
+          display: none;
+      }
+
+      .touch-blocker {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 9998;
+          pointer-events: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="correctSound" src="/assets/audio/cheers.mp3"></audio>
+    <audio id="wrongSound" src="/assets/audio/buzzer.mp3"></audio>
+
+    <div class="game-container">
+      <div class="tree-heading1">
+        <h1>Gulmohar</h1>
+      </div>
+    
+      <button id="restartBtn" class="restartBtn">
+        <img src="/assets/utilities/restart.png" alt="Restart Button" />
+      </button>
+      <button id="quitBtn" class="quitBtn">
+        <img src="/assets/utilities/close.png" alt="Quit Button" />
+      </button>
+      <div class="score">Score: 0</div>
+
+      <!-- Left sidebar with bark parts -->
+      <div class="sidebar-left">
+        <h3 id="bark-name" class="bark-title">Barks</h3>
+        <div class="part" id="mango-bark" draggable="true">
+          <img src="/assets/mango/mango-bark.jpg" alt="Mango Bark" />
+        </div>
+        <div class="part" id="almond-bark" draggable="true">
+          <img src="/assets/almond/almond-bark.jpg" alt="Almond Bark" />
+        </div>
+        <div class="part" id="tamarind-bark" draggable="true">
+          <img src="/assets/tamarind/tamarind-bark.jpg" alt="Tamarind Bark" />
+        </div>
+        <div class="part" id="raintree-bark" draggable="true">
+          <img src="/assets/raintree/raintree-bark.jpg" alt="Raintree Bark" />
+        </div>
+        <div class="part" id="gulmohar-bark" draggable="true">
+          <img src="/assets/gulmohar/gulmohar-bark.jpg" alt="Gulmohar Bark" />
+        </div>
+      </div>
+
+      <!-- Center section with gulmohar silhouette -->
+      <div class="cardTreeContainer">
+        <div id="gulmohar-tree-mainimg" class="droppable">
+          <img src="/assets/gulmohar/gulmohar-mainimg.png" alt="Gulmohar Main Image">
+          <div class="silhouette"></div>
+          <img id="gulmoharmain-barkimg" src="/assets/gulmohar/gulmohar-main-barkimg.png" alt="Gulmohar Bark Image" style="display:none;">
+          <img id="gulmoharmain-leaveimg" src="/assets/gulmohar/gulmohar-main-leaveimg.png" alt="Gulmohar Leaf Image" style="display:none;">
+          <img id="gulmoharmain-fruitimg" src="/assets/gulmohar/gulmohar-main-fruitimg.png" alt="Gulmohar Fruit Image" style="display:none;">
+          <img id="gulmoharmain-flowerimg" src="/assets/gulmohar/gulmohar-main-flowerimg.png" alt="Gulmohar Flower Image" style="display:none;">
+        </div>
+      </div>
+
+      <!-- Right sidebar with leaf parts -->
+      <div class="sidebar-right">
+        <h3 id="leave-name" class="leave-title">Leaves</h3>
+        <div class="part" id="mango-leaf" draggable="true">
+          <img src="/assets/mango/mango-leave.jpg" alt="Mango Leaf" />
+        </div>
+        <div class="part" id="almond-leaf" draggable="true">
+          <img src="/assets/almond/almond-leave.jpg" alt="Almond Leaf" />
+        </div>
+        <div class="part" id="tamarind-leaf" draggable="true">
+          <img src="/assets/tamarind/tamarind-leave.jpg" alt="Tamarind Leaf" />
+        </div>
+        <div class="part" id="raintree-leaf" draggable="true">
+          <img src="/assets/raintree/raintree-leave.jpg" alt="Raintree Leaf" />
+        </div>
+        <div class="part" id="gulmohar-leaf" draggable="true">
+          <img src="/assets/gulmohar/gulmohar-leave.jpg" alt="Gulmohar Leaf" />
+        </div>
+      </div>
+
+      <!-- Footer with fruit and flower parts -->
+      <div class="fruits-bar">
+        <h3 id="fruit-name" class="fruit-title">Fruits</h3>
+        <div class="part" id="mango-fruit" draggable="true">
+          <img src="/assets/mango/mango-fruit.jpg" alt="Mango Fruit" />
+        </div>
+        <div class="part" id="almond-fruit" draggable="true">
+          <img src="/assets/almond/almond-fruit.jpg" alt="Almond Fruit" />
+        </div>
+        <div class="part" id="tamarind-fruit" draggable="true">
+          <img src="/assets/tamarind/tamarind-fruit.jpg" alt="Tamarind Fruit" />
+        </div>
+        <div class="part" id="raintree-fruit" draggable="true">
+          <img src="/assets/raintree/raintree-fruit.jpg" alt="Raintree Fruit" />
+        </div>
+        <div class="part" id="gulmohar-fruit" draggable="true">
+          <img src="/assets/gulmohar/gulmohar-fruit.jpg" alt="Gulmohar Fruit" />
+        </div>
+      </div>
+      <div class="flowers-bar">
+        <h3 id="flower-name" class="flower-title">Flowers</h3>
+        <div class="part" id="mango-flower" draggable="true">
+          <img src="/assets/mango/mango-flower.jpg" alt="Mango Flower" />
+        </div>
+        <div class="part" id="almond-flower" draggable="true">
+          <img src="/assets/almond/almond-flower.jpg" alt="Almond Flower" />
+        </div>
+        <div class="part" id="tamarind-flower" draggable="true">
+          <img src="/assets/tamarind/tamarind-flower.jpg" alt="Tamarind Flower" />
+        </div>
+        <div class="part" id="raintree-flower" draggable="true">
+          <img src="/assets/raintree/raintree-flower.jpg" alt="Raintree Flower" />
+        </div>
+        <div class="part" id="gulmohar-flower" draggable="true">
+          <img src="/assets/gulmohar/gulmohar-flower.jpg" alt="Gulmohar Flower" />
+        </div>
+      </div>
+
+      <!-- Modal for Gulmohar Information -->
+      <div id="gulmohar-info-modal" class="modal-info">
+        <div class="modal-content">
+          <h1 style="text-align: center;">Gulmohar</h1>
+          <div class="modal-body">
+            <div class="cloud-container">
+              <div class="left-circle-container">
+                <div class="circle leave-circle">Leaves are bipinnate and fern-like</div>
+                <div class="circle bark-circle">Bark is smooth and grey when young</div>
+              </div>
+              <div class="circle lifespan-circle">Can live for 50-100 years</div>
+              <div class="circle variety-circle">Known for its vibrant red flowers</div>
+              <img src="/assets/gulmohar/gulmohar-mainimg.png" alt="Gulmohar" class="modal-image">
+              <div class="circle right-flower-circle">Flowers bloom in summer</div>
+              <div class="circle right-fruit-circle">Produces long, dark brown seed pods</div>
+            </div>
+            <div class="modal-text">
+              <button id="identify-next-tree" class="identify-button">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        
+      <!-- Modal for Game Over -->
+      <div id="game-over-modal" class="modal-over">
+        <div class="modal-content-game-over">
+            <!-- <span class="close-button" id="closeGameOverModal">&times;</span> -->
+            <button id="gameOverimg" class="gameOverimg">
+            <img src="/assets/utilities/3.png" alt="Game Over" />
+          </button>
+            <!-- <p>Your score has reached zero!</p> -->
+            <div class="button-container">
+              <div class="button-container">
+                <button id="playAgainBtn" class="modal-button">
+                  <img src="/assets/utilities/restart.png" alt="Play Again" />
+                </button>
+                <button id="mainMenuBtn" class="modal-button">
+                  <img src="/assets/utilities/menu.png " alt="Main Menu" />
+                </button>
+              </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Result Modal -->
+<div id="result-modal" class="modal-over1" style="display:none;">
+  <div class="modal-content-game-over1">
+    <button id="resultImage" class="gameOverimg1">
+      <img src="/assets/utilities/6.png" alt="You Win" />
+    </button>
+    <p class="total-score">Total Score: <span id="total-score">0</span></p>
+    <div class="button-container">
+      <button id="playAgainBtnResult" class="modal-button1">
+        <img src="/assets/utilities/restart.png" alt="Play Again" />
+      </button>
+      <button id="mainMenuBtnResult" class="modal-button1">
+        <img src="/assets/utilities/menu.png" alt="Main Menu" />
+      </button>
+    </div>
+  </div>
+</div>
+
+    </div>
+
+    <script src="/js/gulmoharcontainer.js"></script>
+  </body>
+</html>
