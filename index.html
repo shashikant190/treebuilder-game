@@ -326,7 +326,7 @@ noQuitBtn.addEventListener('click', () => {
     document.getElementById('playBtn').addEventListener('click', () => {
         backgroundMusic.pause();
     // Send increment request to Tree Builder server
-    fetch('https://usertree.vercel.app/api/increment', {
+    fetch('https://treebuilder-game.vercel.app/api/increment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
     })
